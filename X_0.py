@@ -1,167 +1,93 @@
 user_name_1 = input('Введите имя пользователя: ')
 user_name_2 = input('Введите имя пользователя: ')
+user1 = {'name': user_name_1, 'sym': 'X'}
+user2 = {'name': user_name_2, 'sym': 'O'}
 
 
 table = [['-' for _ in range(3)] for _ in range(3)]
-print(f'  0 1 2')
-print(f'0 {table[0][0]} {table[0][1]} {table[0][2]}')
-print(f'1 {table[1][0]} {table[1][1]} {table[1][2]}')
-print(f'2 {table[2][0]} {table[2][1]} {table[2][2]}')
 
-def fill_cell(i, j, el):
-    table[int(i)][int(j)] = el
+
+def print_table():
     print(f'  0 1 2')
     print(f'0 {table[0][0]} {table[0][1]} {table[0][2]}')
     print(f'1 {table[1][0]} {table[1][1]} {table[1][2]}')
     print(f'2 {table[2][0]} {table[2][1]} {table[2][2]}')
 
 
-def check_cell(i, j):
-    if table[int(i)][int(j)] == '-':
-        return True
-    else:
+def input_cor() -> [bool | tuple]:
+    try:
+        print('Введите 1 координату: ', end='')
+        x = int(input())
+        print('Введите 2 координату: ', end='')
+        y = int(input())
+        if x in range(3) and y in range(3):
+            return x, y
+        raise ValueError
+    except ValueError:
+        print('Не корректный ввод')
         return False
 
 
-def check_isdigit(i, j):
-    if i.isdigit() and j.isdigit() and 0 <= int(i) <= 2 and 0 <= int(j) <= 2:
+def check_cell(cor: tuple) -> bool:
+    if table[cor[0]][cor[1]] == '-':
         return True
     else:
+        print('Это ячейка уже занята!')
         return False
 
 
-def check_win():
-    x_count = 0
-    o_count = 0
+def fill_cell(cor: tuple, sym: str) -> None:
+    table[cor[0]][cor[1]] = sym
+
+
+def check_win(user: str) -> bool:
     for i in range(3):
-        for j in range(3):
-            if table[i][j] != '-':
-                if table[i][j] == 'x':
-                    x_count += 1
-                else:
-                    o_count += 1
-            else:
-                x_count = 0
-                o_count = 0
-                break
-        if x_count == 3:
-            return f'Выиграл игрок {user_name_1}'
-        else:
-            x_count = 0
-        if o_count == 3:
-            return f'Выиграл игрок {user_name_2}'
-        else:
-            o_count = 0
-
-    for i in range(3):
-        for j in range(3):
-            if table[j][i] != '-':
-                if table[j][i] == 'x':
-                    x_count += 1
-                else:
-                    o_count += 1
-            else:
-                x_count = 0
-                o_count = 0
-                break
-        if x_count == 3:
-            return f'Выиграл игрок {user_name_1}'
-        else:
-            x_count = 0
-        if o_count == 3:
-            return f'Выиграл игрок {user_name_2}'
-        else:
-            o_count = 0
-    for i in range(3):
-        for j in range(3):
-            if i - j == 0:
-                if table[i][j] != '-':
-                    if table[i][j] == 'x':
-                        x_count += 1
-                    else:
-                        o_count += 1
-                else:
-                    x_count = 0
-                    o_count = 0
-                    break
-        if x_count == 3:
-            return f'Выиграл игрок {user_name_1}'
-        else:
-            x_count = 0
-        if o_count == 3:
-            return f'Выиграл игрок {user_name_2}'
-        else:
-            o_count = 0
-    for i in range(3):
-        for j in range(3):
-            if i + j == 2:
-                if table[i][j] != '-':
-                    if table[i][j] == 'x':
-                        x_count += 1
-                    else:
-                        o_count += 1
-                else:
-                    x_count = 0
-                    o_count = 0
-                    break
-        if x_count == 3:
-            return f'Выиграл игрок {user_name_1}'
-        else:
-            x_count = 0
-        if o_count == 3:
-            return f'Выиграл игрок {user_name_2}'
-        else:
-            o_count = 0
+        if table[i][0] == table[i][1] == table[i][2] != '-':
+            print(f'Игрок {user} выиграл!')
+            return True
+        if table[0][i] == table[1][i] == table[2][i] != '-':
+            print(f'Игрок {user} выиграл!')
+            return True
+    if table[0][0] == table[1][1] == table[2][2] != '-':
+        print(f'Игрок {user} выиграл!')
+        return True
+    if table[0][2] == table[1][1] == table[2][0] != '-':
+        print(f'Игрок {user} выиграл!')
+        return True
+    return False
 
 
-def check_tie():
-    s = []
-    for i in table:
-        s.extend(i)
-    if '-' not in s: return 'Tie'
-    else: return False
-
-def step_user_name_1():
-    print(f'Ход игрока {user_name_1}')
-    i = input('Введите 1 координату: ')
-    j = input('Введите 2 координату: ')
-    if check_isdigit(i, j):
-        if check_cell(i, j):
-            return fill_cell(i, j, 'x')
-        else:
-            print('Тут занято, введите заново!')
-            return step_user_name_1()
-    else:
-        print('Введите цифры от 0-2!')
-        return step_user_name_1()
+def check_tie() -> bool:
+    return all(cell != '-' for row in table for cell in row)
 
 
-def step_user_name_2():
-    print(f'Ход игрока {user_name_2}')
-    i = input('Введите 1 координату: ')
-    j = input('Введите 2 координату: ')
-    if check_isdigit(i, j):
-        if check_cell(i, j):
-            return fill_cell(i, j, 'o')
-        else:
-            print('Тут занято, введите заново!')
-            return step_user_name_2()
-    else:
-        print('Введите цифры от 0-2!')
-        return step_user_name_2()
+def step_user(user: dict) -> bool:
+    print(f'Ход игрока {user["name"]}')
+    cor = input_cor()
+    if cor:
+        if check_cell(cor):
+            fill_cell(cor, user['sym'])
+            return True
+        return False
+    return False
 
 
 def game():
-    step_user_name_1()
-    if check_win():
-        return check_win()
-    if check_tie():
-        return check_tie()
-    step_user_name_2()
-    if check_win():
-        return check_win()
-    else:
-        return game()
+    while True:
+        print_table()
+        if step_user(user1):
+            if check_win(user1['name']):
+                break
+        if check_tie():
+            print("Ничья!")
+            break
+        print_table()
+        if step_user(user2):
+            if check_win(user2['name']):
+                break
+        if check_tie():
+            print("Ничья!")
+            break
 
 
-print(game())
+game()
