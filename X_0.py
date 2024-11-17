@@ -7,7 +7,8 @@ user2 = {'name': user_name_2, 'sym': 'O'}
 table = [['-' for _ in range(3)] for _ in range(3)]
 
 
-def print_table():
+def print_table() -> None:
+    """function for print game table"""
     print(f'  0 1 2')
     print(f'0 {table[0][0]} {table[0][1]} {table[0][2]}')
     print(f'1 {table[1][0]} {table[1][1]} {table[1][2]}')
@@ -72,7 +73,7 @@ def step_user(user: dict) -> bool:
     return False
 
 
-def game():
+def game() -> None:
     while True:
         while True:
             print_table()
