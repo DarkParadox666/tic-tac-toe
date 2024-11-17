@@ -74,19 +74,17 @@ def step_user(user: dict) -> bool:
 
 def game():
     while True:
-        print_table()
-        if step_user(user1):
-            if check_win(user1['name']):
+        while True:
+            print_table()
+            if step_user(user1):
                 break
-        if check_tie():
-            print("Ничья!")
+        if check_tie() or check_win(user1['name']):
             break
-        print_table()
-        if step_user(user2):
-            if check_win(user2['name']):
+        while True:
+            print_table()
+            if step_user(user2):
                 break
-        if check_tie():
-            print("Ничья!")
+        if check_tie() or check_win(user2['name']):
             break
 
 
