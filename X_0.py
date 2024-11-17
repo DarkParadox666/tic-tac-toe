@@ -8,7 +8,7 @@ table = [['-' for _ in range(3)] for _ in range(3)]
 
 
 def print_table() -> None:
-    """function for print game table"""
+    """a function for print the game table"""
     print(f'  0 1 2')
     print(f'0 {table[0][0]} {table[0][1]} {table[0][2]}')
     print(f'1 {table[1][0]} {table[1][1]} {table[1][2]}')
@@ -16,6 +16,7 @@ def print_table() -> None:
 
 
 def input_cor() -> [bool | tuple]:
+    """a function for entering coordinates and checking correctness"""
     try:
         print('Введите 1 координату: ', end='')
         x = int(input())
@@ -30,6 +31,7 @@ def input_cor() -> [bool | tuple]:
 
 
 def check_cell(cor: tuple) -> bool:
+    """this function takes coordinates and checking for the presence of an empty cell"""
     if table[cor[0]][cor[1]] == '-':
         return True
     else:
@@ -38,10 +40,12 @@ def check_cell(cor: tuple) -> bool:
 
 
 def fill_cell(cor: tuple, sym: str) -> None:
+    """the function takes coordinates and  user symbol for filling the cell"""
     table[cor[0]][cor[1]] = sym
 
 
 def check_win(user: str) -> bool:
+    """This function takes username and allows you to check the availability of the game table for character matches """
     for i in range(3):
         if table[i][0] == table[i][1] == table[i][2] != '-':
             print(f'Игрок {user} выиграл!')
@@ -59,10 +63,12 @@ def check_win(user: str) -> bool:
 
 
 def check_tie() -> bool:
+    """This function is for checking the game table for the presence of '-'"""
     return all(cell != '-' for row in table for cell in row)
 
 
 def step_user(user: dict) -> bool:
+    """This function accepts the user dict and runs other functions to check the input, empty the cell and fill the cell"""
     print(f'Ход игрока {user["name"]}')
     cor = input_cor()
     if cor:
@@ -74,6 +80,7 @@ def step_user(user: dict) -> bool:
 
 
 def game() -> None:
+    """this function beginning the game and makes checking win or tie"""
     while True:
         while True:
             print_table()
